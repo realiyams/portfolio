@@ -7,12 +7,12 @@ import Contact from "./components/Contact";
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar locale="en" />
       <main className="pt-16">
-        <Hero />
-        <Projects />
-        <About />
-        <Contact />
+        <Hero locale="en" />
+        <Projects locale="en" />
+        <About locale="en" />
+        <Contact locale="en" />
       </main>
     </>
   );

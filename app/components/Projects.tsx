@@ -1,15 +1,33 @@
 import ProjectCard from "./ProjectCard";
-import { projects } from "../data/projects-data";
+import { projectsByLocale } from "../data/projects-data";
 
-export default function Projects() {
+type Locale = "id" | "en";
+
+const projectsSectionContent: Record<
+  Locale,
+  { id: string; title: string }
+> = {
+  id: {
+    id: "proyek",
+    title: "Proyek",
+  },
+  en: {
+    id: "projects",
+    title: "Projects",
+  },
+};
+
+export default function Projects({ locale }: { locale: Locale }) {
+  const section = projectsSectionContent[locale];
+  const projects = projectsByLocale[locale];
+
   return (
-    <section id="proyek" className="py-24 border-t border-neutral-800">
+    <section id={section.id} className="py-24 border-t border-neutral-800">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-3xl font-bold mb-12">
-          Proyek
+          {section.title}
         </h2>
 
-        {/* Mobile: Stack | Desktop: Grid */}
         <div className="grid gap-6 sm:grid-cols-2">
           {projects.map((project) => (
             <ProjectCard

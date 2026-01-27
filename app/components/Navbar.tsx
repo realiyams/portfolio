@@ -2,19 +2,38 @@
 
 import { useState } from "react";
 
+type Locale = "id" | "en";
+
 type NavItem = {
   label: string;
   id: string;
 };
 
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
-
-  const navItems: NavItem[] = [
+const navItemsByLocale: Record<Locale, NavItem[]> = {
+  id: [
     { label: "Proyek", id: "proyek" },
     { label: "Tentang", id: "tentang" },
     { label: "Hubungi", id: "hubungi" },
-  ];
+  ],
+  en: [
+    { label: "Projects", id: "projects" },
+    { label: "About", id: "about" },
+    { label: "Contact", id: "contact" },
+  ],
+};
+
+export default function Navbar({ locale }: { locale: Locale }) {
+  const [open, setOpen] = useState(false);
+
+  const otherLocale: Locale = locale === "id" ? "en" : "id";
+
+  const switchLocale = () => {
+    // ambil hash agar posisi section tidak hilang
+    const hash = window.location.hash;
+    window.location.href = `/${otherLocale}${hash}`;
+  };
+
+  const navItems = navItemsByLocale[locale];
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
@@ -25,8 +44,6 @@ export default function Navbar() {
       block: "start",
     });
 
-    // Optional: update URL hash
-    history.pushState(null, "", `#${id}`);
   };
 
   return (
@@ -36,7 +53,6 @@ export default function Navbar() {
         <button
           onClick={() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
-            history.pushState(null, "", "/");
           }}
           className="font-semibold text-lg tracking-tight text-white cursor-pointer"
         >
@@ -55,6 +71,31 @@ export default function Navbar() {
               {item.label}
             </button>
           ))}
+
+          {/* Language Toggle */}
+          <div className="flex items-center gap-1 pl-4 border-l border-neutral-800 text-xs">
+            <button
+              onClick={() => locale !== "id" && switchLocale()}
+              className={`cursor-pointer uppercase transition ${locale === "id"
+                ? "text-cyan-400"
+                : "text-neutral-500 hover:text-neutral-300"
+                }`}
+            >
+              ID
+            </button>
+
+            <span className="text-neutral-600">/</span>
+
+            <button
+              onClick={() => locale !== "en" && switchLocale()}
+              className={`cursor-pointer uppercase transition ${locale === "en"
+                ? "text-cyan-400"
+                : "text-neutral-500 hover:text-neutral-300"
+                }`}
+            >
+              EN
+            </button>
+          </div>
         </div>
 
         {/* Hamburger Button */}
@@ -111,6 +152,31 @@ export default function Navbar() {
               {item.label}
             </button>
           ))}
+
+          {/* Language Toggle */}
+          <div className="flex items-center gap-1 pl-2 pt-4 border-t border-neutral-800 text-xs">
+            <button
+              onClick={() => locale !== "id" && switchLocale()}
+              className={`cursor-pointer uppercase transition ${locale === "id"
+                ? "text-cyan-400"
+                : "text-neutral-500 hover:text-neutral-300"
+                }`}
+            >
+              ID
+            </button>
+
+            <span className="text-neutral-600">/</span>
+
+            <button
+              onClick={() => locale !== "en" && switchLocale()}
+              className={`cursor-pointer uppercase transition ${locale === "en"
+                ? "text-cyan-400"
+                : "text-neutral-500 hover:text-neutral-300"
+                }`}
+            >
+              EN
+            </button>
+          </div>
         </div>
       </div>
     </header>
